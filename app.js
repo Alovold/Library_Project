@@ -23,35 +23,44 @@ class Library{
         this.bookCount = 0;
         this.books = [];
     }
-    markRead(checkbox, id){
-        this.books.forEach((book) => {
-            if (book.id == id){
-                book.read = true;
+    markRead(checkbox){
+        
+        //for(let book of currentLibrary.books){
+        //currentLibrary.books.forOf((book) => {
+            // if (book.id == checkbox.id){
+                console.log(checkbox);
+                //book.read = true;
                 checkbox.checked = true;
                 checkbox.disabled = true;
-            }
-        });
+            // }
+        //};
     }
     addBook(event){
         event.preventDefault();
         let newBook = new Book;
         newBook.title = titleInput.value;
         newBook.author = authorInput.value;
-        newBook.read = readInput.value;
+        newBook.read = readInput.checked;
+        newBook.id = currentLibrary.bookCount + 1;
         let newRow = document.createElement("tr");
         let titleCell = document.createElement("td");
         let authorCell = document.createElement("td");
-        let readCell = document.createElement("td");
+        let readCell = document.createElement("input");
+        readCell.type = "checkbox";
+        readCell.id = newBook.id;
+        readCell.checked = newBook.read;
+        readCell.disabled = newBook.read;
         titleCell.textContent = newBook.title;
         authorCell.textContent = newBook.author;
-        readCell.textContent = newBook.read;
+        readCell.addEventListener("click", ()=> currentLibrary.markRead(readCell))
+        
         newRow.appendChild(titleCell);
         newRow.appendChild(authorCell);
         newRow.appendChild(readCell);
         bookTable.appendChild(newRow);
-        this.bookCount += 1;
+        currentLibrary.bookCount += 1;
     }
 }
 
 let currentLibrary = new Library;
-bookSubmit.addEventListener("click", currentLibrary.addBook)
+bookSubmit.addEventListener("submit", currentLibrary.addBook)
